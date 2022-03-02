@@ -39,7 +39,7 @@ resource "github_actions_secret" "cloudify_ssl" {
   plaintext_value  = "false"
 }
 
-resource "github_actions_secret" "cloudify_ssl" {
+resource "github_actions_secret" "cloudify_ssl_trust_all" {
   repository       = github_repository.repo.name
   secret_name      = "cloudify_ssl_trust_all"
   plaintext_value  = "true"
@@ -51,14 +51,14 @@ resource "github_actions_secret" "cloudify_tenant" {
   plaintext_value  = "default_tenant"
 }
 
-resource "github_actions_secret" "cloudify_tenant" {
+resource "github_actions_secret" "aws_deployment_id" {
   repository       = github_repository.repo.name
   secret_name      = "aws_eaas_deployment_id"
   plaintext_value  = "wwt-eaas-poc-aws"
 }
 
-resource "github_actions_secret" "cloudify_tenant" {
+resource "github_actions_secret" "gcp_deployment_id" {
   repository       = github_repository.repo.name
-  secret_name      = "gcp_tf_deployment_id"
+  secret_name      = "gcp_eaas_deployment_id"
   plaintext_value  = "wwt-eaas-poc-gcp"
 }
