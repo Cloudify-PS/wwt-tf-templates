@@ -1,0 +1,12 @@
+rest_calls:
+  - path: /repos/{{full_name}}/actions/runners/registration-token
+    method: POST
+    headers:
+      Content-type: application/json
+      Authorization: 'token {{personal_token}}'
+    response_format: json
+    recoverable_codes: [400, 401, 404, 502, 503]
+    response_translation:
+      token: [registration-token]
+    retry_on_connection_error: true
+    host: '{{host}}'

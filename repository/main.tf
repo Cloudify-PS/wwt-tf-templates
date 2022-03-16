@@ -1,18 +1,12 @@
 resource "github_repository" "repo" {
   name        = "${var.app_name}-repository"
 
-  visibility = "public"
+  visibility = "private"
 
   template {
-    owner      = "marrowne"
+    owner      = "Cloudify-PS"
     repository = "wwt-tf-templates"
   }
-}
-
-resource "github_actions_secret" "app_name" {
-  repository       = github_repository.repo.name
-  secret_name      = "app_name"
-  plaintext_value  = var.app_name
 }
 
 resource "github_actions_secret" "cloudify_host" {
@@ -36,7 +30,7 @@ resource "github_actions_secret" "cloudify_password" {
 resource "github_actions_secret" "cloudify_ssl" {
   repository       = github_repository.repo.name
   secret_name      = "cloudify_ssl"
-  plaintext_value  = "false"
+  plaintext_value  = "true"
 }
 
 resource "github_actions_secret" "cloudify_ssl_trust_all" {
@@ -53,12 +47,18 @@ resource "github_actions_secret" "cloudify_tenant" {
 
 resource "github_actions_secret" "aws_deployment_id" {
   repository       = github_repository.repo.name
-  secret_name      = "aws_eaas_deployment_id"
-  plaintext_value  = "wwt-eaas-poc-aws"
+  secret_name      = "aws_tf_deployment_id"
+  plaintext_value  = "aws-nginx-dev-0"
 }
 
 resource "github_actions_secret" "gcp_deployment_id" {
   repository       = github_repository.repo.name
-  secret_name      = "gcp_eaas_deployment_id"
-  plaintext_value  = "wwt-eaas-poc-gcp"
+  secret_name      = "gcp_tf_deployment_id"
+  plaintext_value  = "gcp-nginx-dev-0"
+}
+
+resource "github_actions_runner_group" "runner" {
+  name                    = github_repository.repo.name
+  visibility              = "selected"
+  selected_repository_ids = [github_repository.repo.repo_id]
 }

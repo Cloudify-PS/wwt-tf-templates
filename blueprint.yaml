@@ -1,0 +1,103 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+description: >
+  This blueprint was automatically created from a Terraform template.
+
+imports:
+  - http://cloudify.co/spec/cloudify/6.3.0/types.yaml
+  - plugin:cloudify-fabric-plugin
+  - plugin:cloudify-terraform-plugin
+  - plugin:cloudify-utilities-plugin
+
+inputs:
+  app_name:
+    type: string
+    default: "wwt-tf"
+
+node_templates:
+  terraform:
+    type: cloudify.nodes.terraform
+    properties:
+      resource_config:
+        installation_source: https://releases.hashicorp.com/terraform/0.14.11/terraform_0.14.11_linux_amd64.zip
+
+  cloud_resources:
+    type: cloudify.nodes.terraform.Module
+    properties:
+      resource_config:
+        source:
+          location: "https://github.com/Cloudify-PS/wwt-tf-templates/archive/refs/heads/master.zip"
+        source_path: "repository"
+        variables:
+          app_name: { get_input: app_name }
+          cloudify_host: { get_secret: cloudify_host }
+          cloudify_password: { get_secret: cloudify_password }
+          cloudify_user: { get_secret: cloudify_user }
+          github_token: { get_secret: github_token }
+    relationships:
+      - target: terraform
+        type: cloudify.terraform.relationships.run_on_host
+
+  registration_token:
+    type: cloudify.rest.Requests
+    properties:
+      port: 443
+      ssl: true
+      verify: false
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: rest/registration-token.yaml
+            params:
+              full_name: { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name] }
+#              repo: { concat: [ { get_input: app_name }, '-repository' ] }
+              personal_token: { get_secret: github_token }
+              host: api.github.com
+    relationships:
+      - target: cloud_resources
+        type: cloudify.relationships.depends_on
+
+  runner_config:
+    type: cloudify.nodes.Root
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create:
+          implementation: fabric.fabric_plugin.tasks.run_script
+          inputs:
+            script_path: scripts/install-runner.sh
+            fabric_env:
+              host_string: { get_secret: runner_host }
+              user: { get_secret: runner_vm_user }
+              password: { get_secret: runner_vm_password }
+            process:
+              env:
+                APP_NAME: { get_input: app_name }
+                REPO_NAME: { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name ] }
+                REGISTRATION_TOKEN: { get_attribute: [ registration_token, result_properties, registration-token ] }
+        configure:
+          implementation: fabric.fabric_plugin.tasks.run_script
+          inputs:
+            script_path: scripts/configure-runner.sh
+            fabric_env:
+              host_string: { get_secret: runner_host }
+              user: { get_secret: runner_root_user }
+              password: { get_secret: runner_root_password }
+            process:
+              env:
+                APP_NAME: { get_input: app_name }
+        delete:
+          implementation: fabric.fabric_plugin.tasks.run_script
+          inputs:
+            script_path: scripts/remove-runner.sh
+            fabric_env:
+              app_name: { get_input: app_name }
+              host_string: { get_secret: runner_host }
+              user: { get_secret: runner_root_user }
+              password: { get_secret: runner_root_password }
+            process:
+              env:
+                APP_NAME: { get_input: app_name }
+    relationships:
+      - target: registration_token
+        type: cloudify.relationships.depends_on
