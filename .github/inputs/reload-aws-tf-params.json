@@ -1,0 +1,7 @@
+{
+  "source": "https://github.com/Cloudify-PS/wwt-tf-templates/archive/refs/heads/master.zip",
+  "source_path": "templates/aws/vm",
+  "node_ids": ["vm"],
+  "force": true
+}
+

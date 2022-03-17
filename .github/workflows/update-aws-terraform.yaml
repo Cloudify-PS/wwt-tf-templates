@@ -1,0 +1,32 @@
+name: Reload AWS Terraform
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+    - aws/templates/*
+jobs:
+  develop:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: profile
+        uses: cloudify-cosmo/cli-action@v1.1
+        with:
+          command: 'profiles list 1>&2'
+      - name: Update Terraform
+        uses: cloudify-cosmo/execute-workflow-action@v1.1
+        with:
+          environment-name: $AWS_DEPLOYMENT_ID
+          workflow: "reload_terraform_template"
+          parameters-file: ".github/inputs/reload-aws-tf-params.json"
+
+env:
+  CLOUDIFY_HOST: ${{ secrets.CLOUDIFY_HOST }}
+  CLOUDIFY_USERNAME: ${{ secrets.CLOUDIFY_USERNAME }}
+  CLOUDIFY_PASSWORD: ${{ secrets.CLOUDIFY_PASSWORD }}
+  CLOUDIFY_TENANT: ${{ secrets.CLOUDIFY_TENANT }}
+  AWS_DEPLOYMENT_ID: ${{ secrets.AWS_TF_DEPLOYMENT_ID }}
+  CLOUDIFY_SSL: ${{ secrets.CLOUDIFY_SSL }}
+  CLOUDIFY_SSL_TRUST_ALL: ${{ secrets.CLOUDIFY_SSL_TRUST_ALL }}

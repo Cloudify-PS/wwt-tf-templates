@@ -51,7 +51,6 @@ node_templates:
             template_file: rest/registration-token.yaml
             params:
               full_name: { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name] }
-#              repo: { concat: [ { get_input: app_name }, '-repository' ] }
               personal_token: { get_secret: github_token }
               host: api.github.com
     relationships:
