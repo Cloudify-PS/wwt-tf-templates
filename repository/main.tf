@@ -56,9 +56,3 @@ resource "github_actions_secret" "gcp_deployment_id" {
   secret_name      = "gcp_tf_deployment_id"
   plaintext_value  = "gcp-nginx-dev-0"
 }
-
-resource "github_actions_runner_group" "runner" {
-  name                    = github_repository.repo.name
-  visibility              = "selected"
-  selected_repository_ids = [github_repository.repo.repo_id]
-}
