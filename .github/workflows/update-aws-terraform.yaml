@@ -11,10 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: profile
-        uses: cloudify-cosmo/cli-action@v1.1
-        with:
-          command: 'profiles list 1>&2'
       - name: Update Terraform
         uses: cloudify-cosmo/execute-workflow-action@v1.1
         with:
