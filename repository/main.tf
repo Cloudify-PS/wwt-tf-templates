@@ -42,7 +42,7 @@ resource "github_actions_secret" "cloudify_ssl_trust_all" {
 resource "github_actions_secret" "cloudify_tenant" {
   repository       = github_repository.repo.name
   secret_name      = "cloudify_tenant"
-  plaintext_value  = "default_tenant"
+  plaintext_value  = var.cloudify_tenant
 }
 
 resource "github_actions_secret" "aws_deployment_id" {

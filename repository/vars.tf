@@ -17,3 +17,7 @@ variable "cloudify_user" {
 variable "cloudify_password" {
     type = string
 }
+
+variable "cloudify_tenant" {
+    type = string
+}

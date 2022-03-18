@@ -34,6 +34,7 @@ node_templates:
           cloudify_password: { get_secret: cloudify_password }
           cloudify_user: { get_secret: cloudify_user }
           github_token: { get_secret: github_token }
+          cloudify_tenant: { get_sys: [ tenant, name ] }
     relationships:
       - target: terraform
         type: cloudify.terraform.relationships.run_on_host
