@@ -120,3 +120,8 @@ node_templates:
     relationships:
       - target: registration_token
         type: cloudify.relationships.depends_on
+
+capabilities:
+  repo_full_name:
+    description: GitHub username and repository name
+    value: { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name] }

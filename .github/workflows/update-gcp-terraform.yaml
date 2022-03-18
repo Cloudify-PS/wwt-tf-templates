@@ -2,9 +2,9 @@ name: Reload GCP Terraform
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
-    - gcp/templates/*
+    - templates/gcp/**
 jobs:
   develop:
     runs-on: self-hosted

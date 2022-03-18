@@ -2,9 +2,9 @@ name: Reload AWS Terraform
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
-    - aws/templates/*
+    - templates/aws/**
 jobs:
   develop:
     runs-on: self-hosted
