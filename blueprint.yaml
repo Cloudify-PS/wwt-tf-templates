@@ -136,3 +136,7 @@ capabilities:
   repo_full_name:
     description: GitHub username and repository name
     value: { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name] }
+
+  repo_url:
+    description: GitHub repository URL
+    value: { get_attribute: [ cloud_resources, outputs, repo_url, value ] }
