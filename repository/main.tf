@@ -48,11 +48,11 @@ resource "github_actions_secret" "cloudify_tenant" {
 resource "github_actions_secret" "aws_deployment_id" {
   repository       = github_repository.repo.name
   secret_name      = "aws_tf_deployment_id"
-  plaintext_value  = "aws-nginx-dev-0"
+  plaintext_value  = "${var.aws_deployment_prefix}-0"
 }
 
 resource "github_actions_secret" "gcp_deployment_id" {
   repository       = github_repository.repo.name
   secret_name      = "gcp_tf_deployment_id"
-  plaintext_value  = "gcp-nginx-dev-0"
+  plaintext_value  = "${var.gcp_deployment_prefix}-0"
 }
