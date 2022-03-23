@@ -1,31 +1,31 @@
 variable "github_token" {
-    type = string
+  type = string
 }
 
 variable "app_name" {
-    type = string
+  type = string
 }
 
 variable "cloudify_host" {
-    type = string
+  type = string
 }
 
 variable "cloudify_user" {
-    type = string
+  type = string
 }
 
 variable "cloudify_password" {
-    type = string
+  type = string
 }
 
 variable "cloudify_tenant" {
-    type = string
+  type = string
 }
 
 variable "aws_deployment_prefix" {
-    type = string
+  type = string
 }
 
 variable "gcp_deployment_prefix" {
-    type = string
+  type = string
 }
