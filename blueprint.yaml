@@ -29,7 +29,7 @@ node_templates:
       resource_config:
         installation_source: https://releases.hashicorp.com/terraform/0.14.11/terraform_0.14.11_linux_amd64.zip
 
-  cloud_resources:
+  repo_and_secrets:
     type: cloudify.nodes.terraform.Module
     properties:
       resource_config:
@@ -61,11 +61,11 @@ node_templates:
           inputs:
             template_file: rest/registration-token.yaml
             params:
-              full_name: { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name] }
+              full_name: { get_attribute: [ repo_and_secrets, resources, repo, instances, 0, attributes, full_name] }
               personal_token: { get_secret: github_token }
               host: api.github.com
     relationships:
-      - target: cloud_resources
+      - target: repo_and_secrets
         type: cloudify.relationships.depends_on
 
   runner_config:
@@ -118,7 +118,7 @@ node_templates:
                   - { get_input: app_name }
                   - "-runner/"
                   - config.sh --url https://github.com/
-                  - { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name ] }
+                  - { get_attribute: [ repo_and_secrets, resources, repo, instances, 0, attributes, full_name ] }
                   - " --unattended --token "
                   - { get_attribute: [ registration_token, result_properties, registration-token ] }
             fabric_env:
@@ -157,8 +157,8 @@ node_templates:
 capabilities:
   repo_full_name:
     description: GitHub username and repository name
-    value: { get_attribute: [ cloud_resources, resources, repo, instances, 0, attributes, full_name] }
+    value: { get_attribute: [ repo_and_secrets, resources, repo, instances, 0, attributes, full_name] }
 
   repo_url:
     description: GitHub repository URL
-    value: { get_attribute: [ cloud_resources, outputs, repo_url, value ] }
+    value: { get_attribute: [ repo_and_secrets, outputs, repo_url, value ] }
