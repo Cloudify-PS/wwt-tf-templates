@@ -72,7 +72,7 @@ node_templates:
     type: cloudify.nodes.Root
     interfaces:
       cloudify.interfaces.lifecycle:
-        create:
+        precreate:
           implementation: fabric.fabric_plugin.tasks.run_commands
           inputs:
             commands:
@@ -94,6 +94,25 @@ node_templates:
                   - " --directory "
                   - { get_input: app_name }
                   - "-runner"
+            fabric_env:
+              host_string: { get_secret: runner_host }
+              user: { get_secret: runner_vm_user }
+              key: { get_secret: runner_key_private }
+        create:
+          implementation: fabric.fabric_plugin.tasks.run_script
+          inputs:
+            script_path: scripts/install-dependencies.sh
+            fabric_env:
+              host_string: { get_secret: runner_host }
+              user: { get_secret: runner_root_user }
+              key: { get_secret: runner_key_private }
+            process:
+              env:
+                APP_NAME: { get_input: app_name }
+        configure:
+          implementation: fabric.fabric_plugin.tasks.run_commands
+          inputs:
+            commands:
               - concat:
                   - { get_input: app_name }
                   - "-runner/"
@@ -105,7 +124,7 @@ node_templates:
               host_string: { get_secret: runner_host }
               user: { get_secret: runner_vm_user }
               key: { get_secret: runner_key_private }
-        configure:
+        start:
           implementation: fabric.fabric_plugin.tasks.run_script
           inputs:
             script_path: scripts/configure-runner.sh
