@@ -109,6 +109,7 @@ node_templates:
             process:
               env:
                 APP_NAME: { get_input: app_name }
+                LABUSER: { get_secret: runner_vm_user }
         configure:
           implementation: fabric.fabric_plugin.tasks.run_commands
           inputs:
@@ -135,6 +136,7 @@ node_templates:
             process:
               env:
                 APP_NAME: { get_input: app_name }
+                LABUSER: { get_secret: runner_vm_user }
         delete:
           implementation: fabric.fabric_plugin.tasks.run_script
           inputs:
@@ -147,6 +149,7 @@ node_templates:
             process:
               env:
                 APP_NAME: { get_input: app_name }
+                LABUSER: { get_secret: runner_vm_user }
     relationships:
       - target: registration_token
         type: cloudify.relationships.depends_on
