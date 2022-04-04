@@ -9,14 +9,14 @@ terraform {
 
 # Specify the provider and access details
 provider "aws" {
-  region = var.aws_region
+  region     = var.aws_region
   access_key = var.access_key
   secret_key = var.secret_key
 }
 
 # Create a VPC
 resource "aws_vpc" "example_vpc" {
-  cidr_block = var.vpc_cidr
+  cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
 }
 
@@ -29,13 +29,13 @@ resource "aws_subnet" "example_subnet" {
   vpc_id                  = aws_vpc.example_vpc.id
   cidr_block              = var.subnet_cidr
   map_public_ip_on_launch = true
-  availability_zone = var.availability_zone
+  availability_zone       = var.availability_zone
 }
 
 resource "aws_route" "example_default_route" {
-  route_table_id = aws_vpc.example_vpc.default_route_table_id
+  route_table_id         = aws_vpc.example_vpc.default_route_table_id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.example_gateway.id
+  gateway_id             = aws_internet_gateway.example_gateway.id
 }
 
 resource "aws_key_pair" "example_keypair" {
