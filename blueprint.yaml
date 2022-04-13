@@ -76,6 +76,15 @@ node_templates:
           implementation: fabric.fabric_plugin.tasks.run_commands
           inputs:
             commands:
+              - 'mkdir -p /tmp/cloudify-ctx/work || true'
+            fabric_env:
+              host_string: { get_secret: runner_host }
+              user: { get_secret: runner_root_user }
+              key: { get_secret: runner_key_private }
+        create:
+          implementation: fabric.fabric_plugin.tasks.run_commands
+          inputs:
+            commands:
               - concat:
                   - "mkdir "
                   - { get_input: app_name }
@@ -98,7 +107,7 @@ node_templates:
               host_string: { get_secret: runner_host }
               user: { get_secret: runner_vm_user }
               key: { get_secret: runner_key_private }
-        create:
+        configure:
           implementation: fabric.fabric_plugin.tasks.run_script
           inputs:
             script_path: scripts/install-dependencies.sh
@@ -110,7 +119,7 @@ node_templates:
               env:
                 APP_NAME: { get_input: app_name }
                 LABUSER: { get_secret: runner_vm_user }
-        configure:
+        start:
           implementation: fabric.fabric_plugin.tasks.run_commands
           inputs:
             commands:
@@ -125,7 +134,7 @@ node_templates:
               host_string: { get_secret: runner_host }
               user: { get_secret: runner_vm_user }
               key: { get_secret: runner_key_private }
-        start:
+        poststart:
           implementation: fabric.fabric_plugin.tasks.run_script
           inputs:
             script_path: scripts/configure-runner.sh
