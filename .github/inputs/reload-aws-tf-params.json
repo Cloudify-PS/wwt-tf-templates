@@ -1,5 +1,5 @@
 {
-  "node_ids": ["vm"],
-  "force": true
+  "node_ids": ["server"],
+  "operation": "tf-reload"
 }
 

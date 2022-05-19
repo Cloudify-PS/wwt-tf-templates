@@ -14,13 +14,8 @@ inputs:
     type: string
     default: "wwt-tf"
 
-  aws_deployment_prefix:
+  eaas_deployment_id:
     type: string
-    default: "aws-nginx-dev"
-
-  gcp_deployment_prefix:
-    type: string
-    default: "gcp-nginx-dev"
 
 node_templates:
   terraform:
@@ -43,8 +38,7 @@ node_templates:
           cloudify_user: { get_secret: cloudify_user }
           github_token: { get_secret: github_token }
           cloudify_tenant: { get_sys: [ tenant, name ] }
-          aws_deployment_prefix: { get_input: aws_deployment_prefix }
-          gcp_deployment_prefix: { get_input: gcp_deployment_prefix }
+          eaas_deployment_id: { get_input: eaas_deployment_id }
     relationships:
       - target: terraform
         type: cloudify.terraform.relationships.run_on_host

@@ -22,10 +22,6 @@ variable "cloudify_tenant" {
     type = string
 }
 
-variable "aws_deployment_prefix" {
-    type = string
-}
-
-variable "gcp_deployment_prefix" {
+variable "eaas_deployment_id" {
     type = string
 }

@@ -45,14 +45,8 @@ resource "github_actions_secret" "cloudify_tenant" {
   plaintext_value  = var.cloudify_tenant
 }
 
-resource "github_actions_secret" "aws_deployment_id" {
+resource "github_actions_secret" "eaas_deployment_id" {
   repository       = github_repository.repo.name
-  secret_name      = "aws_tf_deployment_id"
-  plaintext_value  = "${var.aws_deployment_prefix}-0"
-}
-
-resource "github_actions_secret" "gcp_deployment_id" {
-  repository       = github_repository.repo.name
-  secret_name      = "gcp_tf_deployment_id"
-  plaintext_value  = "${var.gcp_deployment_prefix}-0"
+  secret_name      = "eaas_deployment_id"
+  plaintext_value  = var.eaas_deployment_id
 }
