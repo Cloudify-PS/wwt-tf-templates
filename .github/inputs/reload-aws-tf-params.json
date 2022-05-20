@@ -1,5 +1,5 @@
 {
   "node_ids": ["server"],
-  "operation": "tf-reload"
+  "operation": "terraform.reload"
 }
 
