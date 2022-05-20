@@ -14,8 +14,8 @@ jobs:
       - name: Update Terraform
         uses: cloudify-cosmo/execute-workflow-action@v1.1
         with:
-          environment-name: $GCP_DEPLOYMENT_ID
-          workflow: "reload_terraform_template"
+          environment-name: $EAAS_DEPLOYMENT_ID
+          workflow: "execute_operation"
           parameters-file: ".github/inputs/reload-gcp-tf-params.json"
 
 env:
@@ -23,6 +23,6 @@ env:
   CLOUDIFY_USERNAME: ${{ secrets.CLOUDIFY_USERNAME }}
   CLOUDIFY_PASSWORD: ${{ secrets.CLOUDIFY_PASSWORD }}
   CLOUDIFY_TENANT: ${{ secrets.CLOUDIFY_TENANT }}
-  GCP_DEPLOYMENT_ID: ${{ secrets.GCP_TF_DEPLOYMENT_ID }}
+  EAAS_DEPLOYMENT_ID: ${{ secrets.EAAS_DEPLOYMENT_ID }}
   CLOUDIFY_SSL: ${{ secrets.CLOUDIFY_SSL }}
   CLOUDIFY_SSL_TRUST_ALL: ${{ secrets.CLOUDIFY_SSL_TRUST_ALL }}
